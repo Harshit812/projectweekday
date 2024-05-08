@@ -20,7 +20,7 @@ const ViewMoreLink = styled(Link)({
 
 const CardActionsWrapper = styled(CardActions)({
   paddingTop: '0px',
-  paddingBottom: '20px',
+  paddingBottom: '16px',
 });
 
 export { StyledCard, CardContentWrapper, ViewMoreLink, CardActionsWrapper };

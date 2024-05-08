@@ -27,11 +27,11 @@ const ShowJobDetails = () => {
                 (filters.jobRole ? job.jobRole === filters.jobRole : true) &&
                 (filters.numberOfEmployees ? job.numberOfEmployees <= filters.numberOfEmployees : true) &&
                 (filters.experience ? job.minExp <= filters.experience : true) &&
-                (filters.remote ? job.remote === filters.remote : true) &&
-                (filters.salary ? job.minJdSalary >= filters.salary : true)
+                // (filters.remote ? job.remote === filters.remote : true) &&
+                (filters.salary ? job.maxJdSalary >= filters.salary : true)
             );
         });
-    }, [jobDetails, filters]);
+    }, [jobDetails, filters]); //remote is commented : no data from API
 
     const fetchMoreData = () => {
         const newOffset = page * LIMIT;

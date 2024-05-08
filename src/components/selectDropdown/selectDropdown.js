@@ -5,8 +5,9 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilters } from '../../redux/actions/action';
 
-const SelectDropDown = ({ options, label, customkey, getFilters }) => {
+const SelectDropDown = ({ options, label, customkey }) => {
   const [selectedValue, setSetSelectedValue] = useState([]);
+  const getFilters = useSelector((state)=> state.filters)
   const dispatch = useDispatch();
 
   const handleChange = (event) => {

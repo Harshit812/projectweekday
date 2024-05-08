@@ -44,7 +44,7 @@ const JobCard = ({
             <Typography variant="h5">
               {roleTitle}
             </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
+            <Typography variant="subtitle1" color="textSecondary" fontWeight={500}>
               {location}
             </Typography>
           </div>
@@ -68,17 +68,22 @@ const JobCard = ({
           )}
         </Typography>
         {minExp && (
-          <div style={{ visibility: 'visible' }}>
+          <div style={{ visibility: 'visible' , paddingBottom: '8px'}}>
             <Typography variant="body2" color="textSecondary">
               Minimum Experience
             </Typography>
-            <Typography variant="caption">{minExp} Years</Typography>
+            <Typography variant="body2" fontWeight={800}>{minExp} Years</Typography>
           </div>
         )}
       </CardContentWrapper>
       <CardActionsWrapper>
-        <Button variant="contained" fullWidth color="success" size="medium">
+        <Button variant="contained" fullWidth color="success" size="medium" style={{borderRadius: 8}}>
           Easy Apply
+        </Button>
+      </CardActionsWrapper>
+      <CardActionsWrapper>
+      <Button variant="contained" fullWidth color="info" size="medium" style={{borderRadius: 8}}>
+          Unlock Referral Ask
         </Button>
       </CardActionsWrapper>
     </StyledCard>

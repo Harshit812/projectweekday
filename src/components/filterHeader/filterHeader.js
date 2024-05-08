@@ -30,7 +30,7 @@ const FilterHeader = () => {
         </Select>
       </FormControl>
       {DropDowns?.map((item) => (
-        <SelectDropDown customkey={item.key} label={item.label} options={item.options} getFilters={getFilters}/>
+        <SelectDropDown customkey={item.key} label={item.label} options={item.options}/>
       ))}
     </Box>
   );
