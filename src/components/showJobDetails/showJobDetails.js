@@ -1,67 +1,70 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Grid } from '@mui/material';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeekDayJobsDataAsync } from '../../redux/actions/action';
 import { JobCard } from '../jobCard/jobCard';
-import { useSelector } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-const ShowJobDetails = ({ fetchData, jdList, totalCount, loading, error }) => {
-    
-    useEffect(() => {
-        fetchData();
-    },[fetchData]);
+const LIMIT = 10; // Adjust LIMIT based on your pagination requirements
 
+const ShowJobDetails = () => {
+    const [page, setPage] = useState(1);
+    const dispatch = useDispatch();
     const filters = useSelector((state) => state.filters);
     const jobDetails = useSelector((state) => state.jdList);
+    console.log(jobDetails);
 
-    const filteredJobs = jobDetails.filter((job) => {
-        return (
-            (filters.jobRole ? job.jobRole === filters.jobRole : true) &&
-            (filters.numberOfEmployees ? job.numberOfEmployees >= filters.numberOfEmployees : true) &&
-            (filters.experience ? job.experience <= filters.experience : true) &&
-            (filters.remote ? job.remote === filters.remote : true) &&
-            (filters.salary ? (job.minSalary >= filters.salary) : true)
-        );
-    });
+    useEffect(() => {
+        fetchData(LIMIT, 0); // Initial fetch with offset 0
+    }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const fetchData = (limit, offset) => {
+        dispatch(fetchWeekDayJobsDataAsync(limit, offset));
+    };
 
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
+    const filteredJobs = useMemo(() => {
+        return jobDetails.filter((job) => {
+            return (
+                (filters.jobRole ? job.jobRole === filters.jobRole : true) &&
+                (filters.numberOfEmployees ? job.numberOfEmployees <= filters.numberOfEmployees : true) &&
+                (filters.experience ? job.minExp <= filters.experience : true) &&
+                (filters.remote ? job.remote === filters.remote : true) &&
+                (filters.salary ? job.minJdSalary >= filters.salary : true)
+            );
+        });
+    }, [jobDetails, filters]);
+
+    const fetchMoreData = () => {
+        const newOffset = page * LIMIT;
+        setPage(page + 1);
+        fetchData(LIMIT, newOffset);
+    };
 
     return (
-        <Grid container spacing={6}>
-            {filteredJobs.map((job) => (
-                <Grid item xs={12} sm={6} lg={4} key={job.jdUid}>
-                    <JobCard
-                        companyName={job.companyName}
-                        roleTitle={job.jobRole}
-                        location={job.location}
-                        minSalary={job.minJdSalary}
-                        maxSalary={job.maxJdSalary}
-                        minExp={job.minExp}
-                        aboutCompany={job.jobDetailsFromCompany}
-                        currencyCode={job.salaryCurrencyCode}
-                    />
-                </Grid>
-            ))}
-        </Grid>
+        <InfiniteScroll
+            dataLength={filteredJobs.length}
+            next={fetchMoreData}
+            hasMore={true} // Assuming there's always more data to load
+            loader={<h4>Loading...</h4>}
+        >
+            <Grid container spacing={6}>
+                {filteredJobs.map((job) => (
+                    <Grid item xs={12} sm={6} lg={4} key={job.jdUid}>
+                        <JobCard
+                            companyName={job.companyName}
+                            roleTitle={job.jobRole}
+                            location={job.location}
+                            minSalary={job.minJdSalary}
+                            maxSalary={job.maxJdSalary}
+                            minExp={job.minExp}
+                            aboutCompany={job.jobDetailsFromCompany}
+                            currencyCode={job.salaryCurrencyCode}
+                        />
+                    </Grid>
+                ))}
+            </Grid>
+        </InfiniteScroll>
     );
 };
 
-const mapStateToProps = state => ({
-    jdList: state.jdList,
-    totalCount: state.totalCount,
-    filters: state.filter,
-    loading: state.loading,
-    error: state.error,
-});
-
-const mapDispatchToProps = dispatch => ({
-    fetchData: () => dispatch(fetchWeekDayJobsDataAsync()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ShowJobDetails);
+export default ShowJobDetails;

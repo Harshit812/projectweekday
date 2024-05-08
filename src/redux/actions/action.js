@@ -1,5 +1,5 @@
 import { fetchWeekDayJobsData } from '../services/service';
-import { FETCH_WEEKDAY_JOBS_REQUEST,FETCH_WEEKDAY_JOBS_SUCCESS,FETCH_WEEKDAY_JOBS_FAILURE } from "../types/type";
+import { FETCH_WEEKDAY_JOBS_REQUEST,FETCH_WEEKDAY_JOBS_SUCCESS,FETCH_WEEKDAY_JOBS_FAILURE, SET_FILTERS } from "../types/type";
 
 export const fetchWeekDayJobsRequest = () => ({
     type: FETCH_WEEKDAY_JOBS_REQUEST,
@@ -16,7 +16,7 @@ export const fetchWeekDayJobsFailure = (error) => ({
 });
 
 export const setFilters = (filters) => ({
-  type: 'SET_FILTERS',
+  type: SET_FILTERS,
   payload: filters,
 });
 
