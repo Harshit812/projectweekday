@@ -17,3 +17,25 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 VERCEL: 
 https://projectweekday.vercel.app/
+
+### project structure
+- src
+
+- - components
+
+--- filterHeader
+--- jobCard
+--- selectDropdown
+--- showJobDetails
+
+- - constants
+
+- - redux
+--- actions
+--- reducers
+--- services
+--- types
+
+- App.js
+- index.js
+- package.json
