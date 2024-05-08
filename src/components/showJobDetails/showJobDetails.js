@@ -12,7 +12,6 @@ const ShowJobDetails = () => {
     const dispatch = useDispatch();
     const filters = useSelector((state) => state.filters);
     const jobDetails = useSelector((state) => state.jdList);
-    console.log(jobDetails);
 
     useEffect(() => {
         fetchData(LIMIT, 0); // Initial fetch with offset 0
