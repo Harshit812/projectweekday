@@ -22,17 +22,9 @@ const SelectDropDown = ({ options, label, customkey }) => {
         <InputLabel id={`select-label-${label}`}>{label}</InputLabel>
         <Select
           labelId={`select-label-${label}`}
-          multiple
           value={selectedValue}
           onChange={handleChange}
           input={<OutlinedInput label={label} />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
         >
           {options.map((option) => (
             <MenuItem key={option.value} value={option.value}>
