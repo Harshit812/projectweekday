@@ -1,16 +1,17 @@
 import React from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select, ListSubheader } from '@mui/material';
 import SelectDropDown from '../selectDropdown/selectDropdown';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFilters } from '../../redux/actions/action';
 import { DropDowns, RolesOption } from '../../constants/constOptions';
 
 const FilterHeader = () => {
   const dispatch = useDispatch();
+  const getFilters = useSelector((state)=> state.filters)
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    dispatch(setFilters({ [name]: value }));
+    dispatch(setFilters({ ...getFilters, [name]: value }));
   };
 
   return (
@@ -29,7 +30,7 @@ const FilterHeader = () => {
         </Select>
       </FormControl>
       {DropDowns?.map((item) => (
-        <SelectDropDown customkey={item.key} label={item.label} options={item.options} />
+        <SelectDropDown customkey={item.key} label={item.label} options={item.options} getFilters={getFilters}/>
       ))}
     </Box>
   );

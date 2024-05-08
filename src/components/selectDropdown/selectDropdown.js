@@ -2,17 +2,17 @@ import React from 'react';
 import { Box, OutlinedInput, InputLabel, MenuItem, FormControl, Chip } from '@mui/material';
 import Select from '@mui/material/Select';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFilters } from '../../redux/actions/action';
 
-const SelectDropDown = ({ options, label, customkey }) => {
+const SelectDropDown = ({ options, label, customkey, getFilters }) => {
   const [selectedValue, setSetSelectedValue] = useState([]);
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
     const { value } = event.target;
     setSetSelectedValue(value);
-    dispatch(setFilters({[customkey]: value }));
+    dispatch(setFilters({...getFilters, [customkey]: value }));
   };
 
   return (

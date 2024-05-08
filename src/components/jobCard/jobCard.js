@@ -1,8 +1,26 @@
-import React from 'react';
-import { Button, Typography } from '@mui/material';
-import { StyledCard, CardContentWrapper, ViewMoreLink, CardActionsWrapper } from '../jobCard/jobCardStyle';
+import React, { useState } from 'react';
+import { Button, Typography, Avatar } from '@mui/material';
+import {
+  StyledCard,
+  CardContentWrapper,
+  ViewMoreLink,
+  CardActionsWrapper
+} from '../jobCard/jobCardStyle';
 
-const JobCard = ({ companyName, roleTitle, location, minSalary, maxSalary, minExp, aboutCompany, currencyCode, jdUid }) => {
+const JobCard = ({
+  companyName,
+  roleTitle,
+  location,
+  minSalary,
+  maxSalary,
+  minExp,
+  aboutCompany,
+  currencyCode,
+  jdUid,
+  logoUrl
+}) => {
+  const [showFullAboutCompany, setShowFullAboutCompany] = useState(false);
+
   const getSalary = () => {
     if (minSalary && maxSalary) {
       return `${minSalary}${currencyCode} - ${maxSalary}${currencyCode}`;
@@ -10,30 +28,45 @@ const JobCard = ({ companyName, roleTitle, location, minSalary, maxSalary, minEx
     return `${minSalary || maxSalary}${currencyCode}`;
   };
 
+  const toggleAboutCompany = () => {
+    setShowFullAboutCompany(!showFullAboutCompany);
+  };
+
   return (
     <StyledCard variant="outlined" id={jdUid}>
       <CardContentWrapper>
-        <Typography variant="h6" color="textSecondary">
-          {companyName}
-        </Typography>
-        <Typography variant="h5" gutterBottom>
-          {roleTitle}
-        </Typography>
-        <Typography variant="subtitle1" color="textSecondary">
-          {location}
-        </Typography>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+          {logoUrl && <Avatar alt={companyName} src={logoUrl} />}
+          <div style={{ marginLeft: logoUrl ? '8px' : '0' }}>
+            <Typography variant="h6" component="div">
+              {companyName}
+            </Typography>
+            <Typography variant="h5">
+              {roleTitle}
+            </Typography>
+            <Typography variant="subtitle1" color="textSecondary">
+              {location}
+            </Typography>
+          </div>
+        </div>
+
         <Typography variant="body2" color="textSecondary" gutterBottom>
           Estimated Salary: {getSalary()}
         </Typography>
         <Typography variant="body1" gutterBottom>
           About Company:
         </Typography>
-        <Typography variant="body2" paragraph>
-          {aboutCompany}
+        <Typography variant='subtitle1' gutterBottom fontWeight={800}>
+          About Us:
         </Typography>
-        <ViewMoreLink variant="caption" color="primary" href="#">
-          View More
-        </ViewMoreLink>
+        <Typography variant="body2" paragraph>
+          {showFullAboutCompany ? aboutCompany : aboutCompany.slice(0, 450)}
+          {!showFullAboutCompany && aboutCompany.length > 100 && (
+            <ViewMoreLink variant="caption" color="primary" onClick={toggleAboutCompany}>
+              View More
+            </ViewMoreLink>
+          )}
+        </Typography>
         {minExp && (
           <div style={{ visibility: 'visible' }}>
             <Typography variant="body2" color="textSecondary">

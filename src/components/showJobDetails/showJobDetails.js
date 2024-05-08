@@ -58,6 +58,7 @@ const ShowJobDetails = () => {
                             minExp={job.minExp}
                             aboutCompany={job.jobDetailsFromCompany}
                             currencyCode={job.salaryCurrencyCode}
+                            logoUrl={job.logoUrl}
                         />
                     </Grid>
                 ))}
