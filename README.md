@@ -23,18 +23,19 @@ https://projectweekday.vercel.app/
 
 - - components
 
---- filterHeader
---- jobCard
---- selectDropdown
---- showJobDetails
+`filterHeader`
+`jobCard`
+`selectDropdown`
+`showJobDetails`
 
 - - constants
 
 - - redux
---- actions
---- reducers
---- services
---- types
+
+`actions`
+`reducers`
+`services`
+`types`
 
 - App.js
 - index.js
