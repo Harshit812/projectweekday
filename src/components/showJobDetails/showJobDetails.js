@@ -38,7 +38,7 @@ const ShowJobDetails = () => {
     //commented some filters as they are not part of API
 
     const [infiniteRef] = useInfiniteScroll({
-        loading: true, //set Loading to false to enable infinite scrolling
+        loading: false, //set Loading to false to enable infinite scrolling
         hasNextPage: !(totalCount===allJobs.length),
         onLoadMore: () => {
             const newOffset = LIMIT * page;
