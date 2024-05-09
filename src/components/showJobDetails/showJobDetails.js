@@ -1,51 +1,57 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeekDayJobsDataAsync } from '../../redux/actions/action';
 import { JobCard } from '../jobCard/jobCard';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import useInfiniteScroll from 'react-infinite-scroll-hook'; // Importing the default export
 
-const LIMIT = 10; // Adjust LIMIT based on your pagination requirements
+const LIMIT = 10; // pagination requirements
 
 const ShowJobDetails = () => {
-    const [page, setPage] = useState(1);
     const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
     const filters = useSelector((state) => state.filters);
     const jobDetails = useSelector((state) => state.jdList);
+    const totalCount = useSelector((state) => state.totalCount);
+    const [allJobs, setAllJobs] = useState(jobDetails);
 
     useEffect(() => {
-        fetchData(LIMIT, 0); // Initial fetch with offset 0
+        fetchData(0); // Initial fetch with offset 0
     }, []);
 
-    const fetchData = (limit, offset) => {
-        dispatch(fetchWeekDayJobsDataAsync(limit, offset));
+    const fetchData = (offset) => {
+        console.log('Fetching data with offset:', offset);
+        dispatch(fetchWeekDayJobsDataAsync(LIMIT, offset));
+        setAllJobs(prev=>[...prev, ...jobDetails]);
     };
 
     const filteredJobs = useMemo(() => {
-        return jobDetails.filter((job) => {
+        return allJobs.filter((job) => {
             return (
                 (filters.jobRole ? job.jobRole === filters.jobRole : true) &&
-                (filters.numberOfEmployees ? job.numberOfEmployees <= filters.numberOfEmployees : true) &&
                 (filters.experience ? job.minExp <= filters.experience : true) &&
-                // (filters.remote ? job.remote === filters.remote : true) &&
+                // (filters.experience ? job.remote === filters.remote : true) &&
+                // (filters.experience ? job.numberOfEmployees <= filters.numberOfEmployees : true) &&
                 (filters.salary ? job.maxJdSalary >= filters.salary : true)
             );
         });
-    }, [jobDetails, filters]); //remote is commented : no data from API
+    }, [jobDetails, filters]);
+    //commented some filters as they are not part of API
 
-    const fetchMoreData = () => {
-        const newOffset = page * LIMIT;
-        setPage(page + 1);
-        fetchData(LIMIT, newOffset);
-    };
+    const [infiniteRef] = useInfiniteScroll({
+        loading: true, //set loading to false for infinite scrolling
+        hasNextPage: true,
+        onLoadMore: () => {
+            const newOffset = LIMIT * page;
+            fetchData(newOffset);
+            setPage(page+1);
+            
+        },
+        disabled: totalCount===allJobs.length
+    });
 
     return (
-        <InfiniteScroll
-            dataLength={filteredJobs.length}
-            next={fetchMoreData}
-            hasMore={true} // Assuming there's always more data to load
-            loader={<h4>Loading...</h4>}
-        >
+        <div ref={infiniteRef} style={{ overflow: 'auto', maxHeight: '80vh' }}>
             <Grid container spacing={6}>
                 {filteredJobs.map((job) => (
                     <Grid item xs={12} sm={6} lg={4} key={job.jdUid}>
@@ -63,7 +69,7 @@ const ShowJobDetails = () => {
                     </Grid>
                 ))}
             </Grid>
-        </InfiniteScroll>
+        </div>
     );
 };
 

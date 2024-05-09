@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, OutlinedInput, InputLabel, MenuItem, FormControl, Chip } from '@mui/material';
+import { OutlinedInput, InputLabel, MenuItem, FormControl } from '@mui/material';
 import Select from '@mui/material/Select';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
