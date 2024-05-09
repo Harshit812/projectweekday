@@ -3,9 +3,9 @@ import { Grid } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeekDayJobsDataAsync } from '../../redux/actions/action';
 import { JobCard } from '../jobCard/jobCard';
-import useInfiniteScroll from 'react-infinite-scroll-hook'; // Importing the default export
+import useInfiniteScroll from 'react-infinite-scroll-hook';
 
-const LIMIT = 10; // pagination requirements
+const LIMIT = 10;
 
 const ShowJobDetails = () => {
     const dispatch = useDispatch();
@@ -20,7 +20,6 @@ const ShowJobDetails = () => {
     }, []);
 
     const fetchData = (offset) => {
-        console.log('Fetching data with offset:', offset);
         dispatch(fetchWeekDayJobsDataAsync(LIMIT, offset));
         setAllJobs(prev=>[...prev, ...jobDetails]);
     };
@@ -39,21 +38,18 @@ const ShowJobDetails = () => {
     //commented some filters as they are not part of API
 
     const [infiniteRef] = useInfiniteScroll({
-        loading: true, //set loading to false for infinite scrolling
-        hasNextPage: true,
+        loading: true, //set Loading to false to enable infinite scrolling
+        hasNextPage: !(totalCount===allJobs.length),
         onLoadMore: () => {
             const newOffset = LIMIT * page;
             fetchData(newOffset);
             setPage(page+1);
-            
         },
-        disabled: totalCount===allJobs.length
     });
 
     return (
-        <div ref={infiniteRef} style={{ overflow: 'auto', maxHeight: '80vh' }}>
             <Grid container spacing={6}>
-                {filteredJobs.map((job) => (
+                {allJobs.length>0 && filteredJobs.map((job) => (
                     <Grid item xs={12} sm={6} lg={4} key={job.jdUid}>
                         <JobCard
                             companyName={job.companyName}
@@ -68,8 +64,8 @@ const ShowJobDetails = () => {
                         />
                     </Grid>
                 ))}
+                {!(totalCount===allJobs.length) && <div ref={infiniteRef}>Loading</div>}
             </Grid>
-        </div>
     );
 };
 
