@@ -49,7 +49,7 @@ const ShowJobDetails = () => {
 
     return (
             <Grid container spacing={6}>
-                {allJobs.length>0 && filteredJobs.map((job) => (
+                {filteredJobs.length>0 && filteredJobs.map((job) => (
                     <Grid item xs={12} sm={6} lg={4} key={job.jdUid}>
                         <JobCard
                             companyName={job.companyName}
